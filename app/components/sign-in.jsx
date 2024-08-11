@@ -1,4 +1,4 @@
-import { auth } from "@/firebase";
+import { app, auth } from "@/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 export const SignedIn = ({ children }) => {

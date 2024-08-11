@@ -4,11 +4,17 @@
 import React, { useState } from "react";
 import styles from "./page.module.css";
 import { getGroqChatCompletion } from "./groqClient.js"; // Named import
+import { SignedIn } from "./components/sign-in";
+import { SignedOut } from "./components/sign-out";
+import { auth } from "@/firebase";
+import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 
 export default function Home() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [user, authLoading] = useAuthState(auth);
+  const [signOut] = useSignOut(auth);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,6 +50,14 @@ export default function Home() {
   };
 
   return (
+    <>
+    <SignedIn>
+    <div className={styles.nav}>
+      <div className={styles.navBar}>
+        <h1>Chat Support</h1>
+        <button onClick={() => signOut()}>Log Out</button>
+      </div>
+     </div>
     <main className={styles.main}>
       <div className={styles.chatContainer}>
         <div className={styles.messages}>
@@ -68,5 +82,47 @@ export default function Home() {
         </form>
       </div>
     </main>
+    </SignedIn>
+    <SignedOut>
+      <div className={styles.mainBackground}>
+        <header className={styles.header}>
+        <h1>Intelligent Conversation with AI</h1>
+        <p>Explore the power of our advanced AI chatbot.</p>
+      </header>
+
+      <main className={styles.mainLanding}>
+        <section className={styles.feature}>
+          <div className={styles.featurecontent}>
+            <h2>Engage in Natural Conversation</h2>
+            <p>
+              Designed to understand and respond to your messages quickly. 
+              Experience seamless communication and get your questions answered efficiently.
+            </p>
+          </div>
+        </section>
+
+        <section className={styles.feature}>
+        
+          <div className={styles.featurecontent}>
+            <h2>Personalized Assistance</h2>
+            <p>
+              Adapts to your unique needs and preferences, providing a tailored experience that caters to your specific requirements. 
+              Get the support you need, whenever you need it.
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <section className={styles.cta}>
+        <h2>Start Chatting with Our AI Today</h2>
+        <a href="/login">Sign Up Now</a>
+      </section>
+
+      <footer className={styles.footer}>
+        <p>&copy; 2024 AI Chatbot. All rights reserved.</p>
+      </footer>
+    </div>
+    </SignedOut>
+    </>
   );
 }
