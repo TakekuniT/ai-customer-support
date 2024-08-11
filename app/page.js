@@ -2,8 +2,14 @@
 "use client";  // Add this line at the very top
 
 import React, { useState } from "react";
+import Groq from "groq-sdk";
 import styles from "./page.module.css";
 import { getGroqChatCompletion } from "./groqClient.js"; // Named import
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const groq = new Groq({ apiKey: "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", dangerouslyAllowBrowser: true });
 
 export default function Home() {
   const [messages, setMessages] = useState([]);
@@ -24,8 +30,15 @@ export default function Home() {
 
     try {
       // Pass user input to getGroqChatCompletion
-      const response = await getGroqChatCompletion(input);
-
+      const response = await groq.chat.completions.create({
+        messages: [
+          {
+            role: "user",
+            content: input, 
+          },
+        ],
+        model: "llama3-8b-8192",
+      });
       // Update messages with response
       setMessages(prevMessages => [
         ...prevMessages,

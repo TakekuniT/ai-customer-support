@@ -4,14 +4,14 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const groq = new Groq({ apiKey: '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', dangerouslyAllowBrowser: true });
+const groq = new Groq({ apiKey: "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", dangerouslyAllowBrowser: true });
 
 export async function getGroqChatCompletion(userInput) {
   return groq.chat.completions.create({
     messages: [
       {
         role: "user",
-        content: userInput, // Use user input here
+        content: userInput, 
       },
     ],
     model: "llama3-8b-8192",
